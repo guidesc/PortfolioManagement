@@ -192,7 +192,7 @@ class PortfolioSim(object):
             "cost": c1,
         }
         # record weights and prices
-        for i, name in enumerate(['BTCBTC'] + self.asset_names):
+        for i, name in enumerate(['USD'] + self.asset_names):
             info['weight_' + name] = w1[i]
             info['price_' + name] = y1[i]
 
@@ -372,7 +372,7 @@ class PortfolioEnv(gym.Env):
         df_info.index = pd.to_datetime(df_info["date"], unit='s')
 
         # plot prices and performance
-        all_assets = ['BTCBTC'] + self.sim.asset_names
+        all_assets = ['USD'] + self.sim.asset_names
         if not self._plot:
             colors = [None] * len(all_assets) + ['black']
             self._plot_dir = os.path.join(
