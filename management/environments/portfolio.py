@@ -215,7 +215,7 @@ class PortfolioEnv(gym.Env):
     Based on [Jiang 2017](https://arxiv.org/abs/1706.10059)
     """
 
-    metadata = {'render.modes': ['notebook', 'ansi']}
+    metadata = {'render.modes': ['notebook', 'ansi', 'human']}
 
     def __init__(self,
                  df,
@@ -360,6 +360,8 @@ class PortfolioEnv(gym.Env):
             pprint(self.infos[-1])
         elif mode == 'notebook':
             self.plot_notebook(close)
+        elif mode == 'human':
+            pass
 
     def plot_notebook(self, close=False):
         """Live plot using the jupyter notebook rendering of matplotlib."""
