@@ -20,7 +20,8 @@ logger = logging.getLogger(__name__)
 class DataSrc(object):
     """Acts as data provider for each new episode."""
 
-    def __init__(self, df, steps=252, scale=True, scale_extra_cols=True, augment=0.00, window_length=50, random_reset=True):
+    def __init__(self, df, steps=252, scale=True, scale_extra_cols=True,
+    augment=0.00, window_length=50, random_reset=True):
         """
         DataSrc.
 
@@ -62,10 +63,6 @@ class DataSrc(object):
         if scale_extra_cols:
             x = self._data.reshape((-1, len(self.features)))
             self.stats = dict(mean=x.mean(0), std=x.std(0))
-            # for column in self._data.columns.levels[1].tolist():
-            #     x = df.xs(key=column, axis=1, level='Price').as_matrix()[:, :]
-            #     self.stats["mean"].append(x.mean())
-            #      = dict(mean=x.mean(), std=x.std())
 
         self.reset()
 
@@ -243,8 +240,6 @@ class PortfolioEnv(gym.Env):
             augment - fraction to randomly shift data by
             output_mode: decides observation["history"] shape
             - 'EIIE' for (assets, window, 3)
-            - 'atari' for (window, window, 3) (assets is padded)
-            - 'mlp' for (assets*window*3)
             log_dir: directory to save plots to
             scale - scales price data by last opening price on each episode (except return)
             scale_extra_cols - scales non price data using mean and std for whole dataset
@@ -316,7 +311,7 @@ class PortfolioEnv(gym.Env):
         np.testing.assert_almost_equal(
             np.sum(weights), 1.0, 3, err_msg='weights should sum to 1. action="%s"' % weights)
 
-        history, y1, done1 = self.src._step()
+        history, y1, done1 = self.src._step() # normalize and import data
 
         reward, info, done2 = self.sim._step(weights, y1)
 
@@ -358,9 +353,9 @@ class PortfolioEnv(gym.Env):
             # return
         if mode == 'ansi':
             pprint(self.infos[-1])
-        elif mode == 'notebook':
-            self.plot_notebook(close)
         elif mode == 'human':
+            self.plot_notebook(close)
+        elif mode == 'xx':
             pass
 
     def plot_notebook(self, close=False):
